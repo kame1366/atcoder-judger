@@ -24,9 +24,9 @@ fn main() {
     let args = Args::parse();
 
     if args.download != None && args.test != None {
-        eprintln!("Download and test can't coexistence!");
+        eprintln!("Error!: Download and test can't coexistence!");
     } else if args.download == None && args.test == None {
-        eprintln!("Please input args!");
+        eprintln!("Error!: Please input args!");
     } else {
         if args.download != None {
             download::download(args.download.clone().unwrap());
