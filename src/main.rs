@@ -23,15 +23,13 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    if args.download != None && args.test != None {
+    if args.download.is_some() && args.test.is_some() {
         eprintln!("Error!: Download and test can't coexistence!");
-    } else if args.download == None && args.test == None {
+    } else if args.download.is_none() && args.test.is_none() {
         eprintln!("Error!: Please input args!");
-    } else {
-        if args.download != None {
-            download::download(args.download.clone().unwrap());
-        } else if args.test != None {
-            test::test(args.test.clone().unwrap());
-        }
+    } else if args.download.is_some() {
+        download::download(args.download.clone().unwrap());
+    } else if args.test.is_some() {
+        test::test(args.test.clone().unwrap());
     }
 }
