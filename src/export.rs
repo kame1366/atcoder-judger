@@ -12,11 +12,11 @@ fn getpath_from_id(contest_id: String, problem_id: String) -> PathBuf {
     path
 }
 
-fn write_file(path: &PathBuf, text: String) -> Result<(), Box<dyn Error>> {
-    fs::create_dir_all(path)?;
-    let mut file = OpenOptions::new().write(true).create_new(true).open(path)?;
+fn write_file(dirname: &PathBuf, filename: String, contents: String) -> Result<(), Box<dyn Error>> {
+    fs::create_dir_all(dirname)?;
+    let mut file = OpenOptions::new().write(true).create(true).open(dirname.join(filename))?;
 
-    file.write_all(text.as_bytes())?;
+    file.write_all(contents.as_bytes())?;
 
     Ok(())
 }
@@ -24,13 +24,15 @@ fn write_file(path: &PathBuf, text: String) -> Result<(), Box<dyn Error>> {
 pub fn export(contest_id: String, problem_id: String, samplecase: Vec<String>) {
     println!("Exporting...");
 
-    let path = getpath_from_id(contest_id, problem_id);
+    let base_path = getpath_from_id(contest_id, problem_id);
+    let input_path = base_path.join("in");
+    let output_path = base_path.join("out");
 
     for i in 0..samplecase.len() / 2 {
         let input = samplecase[i * 2].clone();
         let output = samplecase[i * 2 + 1].clone();
 
-        write_file(&path.join(format!("in/{:04}.txt", i)), input).unwrap();
-        write_file(&path.join(format!("out/{:04}.txt", i)), output).unwrap();
+        write_file(&input_path, format!("{:04}.txt", i), input).unwrap();
+        write_file(&output_path, format!("{:04}.txt", i), output).unwrap();
     }
 }
