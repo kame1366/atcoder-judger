@@ -1,5 +1,7 @@
 use std::error::Error;
 
+use crate::export;
+
 fn get_samplecase(url: String) -> Result<Vec<String>, Box<dyn Error>> {
     let body = reqwest::blocking::get(url)?.text()?;
     let document = scraper::Html::parse_document(&body);
@@ -12,21 +14,37 @@ fn get_samplecase(url: String) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(element)
 }
 
-fn get_from_id(url_id: String) -> Result<(), Box<dyn Error>> {
-    let url = format!("https://atcoder.jp/contests/{url_id}/tasks/{url_id}");
-    let problem_id = vec!["a", "b", "c", "d", "e", "f", "g"];
+fn save(contest_id: String, problem_id: String) {
+    let url = format!("https://atcoder.jp/contests/{contest_id}/tasks/{contest_id}_{problem_id}");
 
-    for id in problem_id {
-        let element = get_samplecase(format!("{url}_{id}"))?;
-        element.iter().for_each(|e| println!("{}", e));
+    let samplecase = match get_samplecase(url) {
+        Ok(samlecase) => samlecase,
+        Err(e) => {
+            eprintln!("{}", e);
+            return;
+        }
+    };
+
+    if samplecase.is_empty() {
+        return;
     }
 
-    Ok(())
+    export::export(contest_id, problem_id, samplecase);
+
+}
+
+fn get_from_id(contest_id: String) {
+    let contest_id = contest_id.to_lowercase();
+    const PROBLEM_ID: [&str; 8] = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+    for id in PROBLEM_ID {
+        save(contest_id.clone(), String::from(id));
+    }
 }
 
 pub fn download(url_id: String) {
     println!("Hello from download!");
     println!("I will download from {}!", url_id);
 
-    let _ = get_from_id(url_id);
+    get_from_id(url_id);
 }
