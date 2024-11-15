@@ -42,9 +42,7 @@ fn get_from_id(contest_id: String) {
     }
 }
 
-pub fn download(url_id: String) {
-    println!("Hello from download!");
-    println!("I will download from {}!", url_id);
-
-    get_from_id(url_id);
+pub fn download(contest_id: String) {
+    println!("Downloading from {}...", contest_id);
+    get_from_id(contest_id);
 }

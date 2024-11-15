@@ -22,7 +22,7 @@ fn write_file(dirname: &PathBuf, filename: String, contents: String) -> Result<(
 }
 
 pub fn export(contest_id: String, problem_id: String, samplecase: Vec<String>) {
-    println!("Exporting...");
+    println!("Exporting {} {}...", contest_id, problem_id);
 
     let base_path = getpath_from_id(contest_id, problem_id);
     let input_path = base_path.join("in");
