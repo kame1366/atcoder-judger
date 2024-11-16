@@ -1,10 +1,10 @@
 use std::{env, error::Error, fs::{self, OpenOptions}, io::Write, path::PathBuf};
 
 fn getpath_from_id(contest_id: String, problem_id: String) -> PathBuf {
-    let home = env::var("HOME").unwrap();
+    let current = env::current_dir().unwrap();
 
     let mut path = PathBuf::new();
-    path.push(home);
+    path.push(current);
     path.push(".atcoder-judger");
     path.push(contest_id);
     path.push(problem_id);
