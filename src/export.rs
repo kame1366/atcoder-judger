@@ -1,12 +1,11 @@
 use std::{env, error::Error, fs::{self, OpenOptions}, io::Write, path::PathBuf};
 
-fn getpath_from_id(contest_id: String, problem_id: String) -> PathBuf {
+fn getpath_from_id(problem_id: String) -> PathBuf {
     let current = env::current_dir().unwrap();
 
     let mut path = PathBuf::new();
     path.push(current);
     path.push(".atcoder-judger");
-    path.push(contest_id);
     path.push(problem_id);
 
     path
@@ -24,7 +23,7 @@ fn write_file(dirname: &PathBuf, filename: String, contents: String) -> Result<(
 pub fn export(contest_id: String, problem_id: String, samplecase: Vec<String>) {
     println!("Exporting {} {}...", contest_id, problem_id);
 
-    let base_path = getpath_from_id(contest_id, problem_id);
+    let base_path = getpath_from_id(problem_id);
     let input_path = base_path.join("in");
     let output_path = base_path.join("out");
 
